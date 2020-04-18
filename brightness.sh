@@ -3,11 +3,11 @@ PRIMARY_DISPLAY=$(xrandr --verbose | grep 'connected primary' | head -n 1 | awk 
 ARG=$1
 case $ARG in
 	--increase)
-		BRIGHTNESS=$(xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' ' | awk '{print $1 + 0.2}')
+		BRIGHTNESS=$(xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' ' | awk '{print (($1 + 0.2) > 1) ? 1 : ($1 + 0.2)}')
 		xrandr --output $PRIMARY_DISPLAY --brightness $BRIGHTNESS
 		;;
 	--decrease)
-		BRIGHTNESS=$(xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' ' | awk '{print $1 - 0.2}')
+		BRIGHTNESS=$(xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' ' | awk '{print (($1 - 0.2) < 0) ? 0 : ($1 - 0.2)}')
 		xrandr --output $PRIMARY_DISPLAY --brightness $BRIGHTNESS
 		;;
 	*) cat <<EOF
